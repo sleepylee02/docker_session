@@ -1,5 +1,27 @@
+/**
+ * Docker Todo App Frontend
+ * 
+ * A vanilla JavaScript application that provides a user interface for managing todo items.
+ * Communicates with the FastAPI backend through REST API calls and includes comprehensive
+ * logging and monitoring capabilities.
+ * 
+ * Author: Docker Session Demo
+ * Date: 2025
+ */
+
+// Backend API base URL - points to the FastAPI server
 const API_URL = 'http://localhost:5000/api';
 
+/**
+ * Centralized logging function for frontend operations.
+ * 
+ * Logs messages to both browser console and localStorage for persistence.
+ * Supports different log levels and optional data objects.
+ * 
+ * @param {string} level - Log level: 'INFO', 'ERROR', or 'WARN'
+ * @param {string} message - Main log message
+ * @param {*} data - Optional additional data to log (will be stringified)
+ */
 function logToConsole(level, message, data = null) {
     const timestamp = new Date().toISOString();
     const logMessage = `🌐 FRONTEND [${level}] ${timestamp}: ${message}`;
@@ -28,6 +50,13 @@ function logToConsole(level, message, data = null) {
     localStorage.setItem('frontendLogs', JSON.stringify(logs));
 }
 
+/**
+ * Load all todo items from the backend API.
+ * 
+ * Fetches todos from the /api/todos endpoint and displays them in the UI.
+ * Includes performance timing and comprehensive error handling.
+ * Automatically called on page load and after todo modifications.
+ */
 async function loadTodos() {
     try {
         logToConsole('INFO', '📝 Requesting todos from backend API');
@@ -51,6 +80,17 @@ async function loadTodos() {
     }
 }
 
+/**
+ * Render todo items in the user interface.
+ * 
+ * Creates HTML elements for each todo with:
+ * - Clickable title for toggling completion status
+ * - Due date display with visual indicators (overdue, today)
+ * - Delete button for removal
+ * - Appropriate CSS classes for styling
+ * 
+ * @param {Array} todos - Array of todo objects from the API
+ */
 function displayTodos(todos) {
     const todoList = document.getElementById('todoList');
     todoList.innerHTML = '';
@@ -90,6 +130,13 @@ function displayTodos(todos) {
     });
 }
 
+/**
+ * Create a new todo item from user input.
+ * 
+ * Validates form data and sends POST request to create a new todo.
+ * Supports optional due date and handles various error scenarios.
+ * Clears form inputs on successful creation.
+ */
 async function addTodo() {
     const input = document.getElementById('todoInput');
     const dueDateInput = document.getElementById('dueDateInput');
@@ -144,6 +191,14 @@ async function addTodo() {
     }
 }
 
+/**
+ * Toggle the completion status of a todo item.
+ * 
+ * Sends PUT request to /api/todos/{id}/toggle endpoint to switch
+ * between completed and pending states. Refreshes the todo list on success.
+ * 
+ * @param {number} id - Unique identifier of the todo to toggle
+ */
 async function toggleTodo(id) {
     try {
         logToConsole('INFO', `🔄 Toggling todo ID: ${id}`);
@@ -169,6 +224,14 @@ async function toggleTodo(id) {
     }
 }
 
+/**
+ * Permanently delete a todo item.
+ * 
+ * Sends DELETE request to remove the todo from the database.
+ * Refreshes the todo list on successful deletion.
+ * 
+ * @param {number} id - Unique identifier of the todo to delete
+ */
 async function deleteTodo(id) {
     try {
         logToConsole('INFO', `🗑️ Deleting todo ID: ${id}`);
@@ -192,10 +255,17 @@ async function deleteTodo(id) {
     }
 }
 
-let logsVisible = false;
-let databaseVisible = false;
-let autoRefreshInterval;
+// Global state variables for monitoring panels
+let logsVisible = false;        // Whether the system logs panel is currently visible
+let databaseVisible = false;    // Whether the database info panel is currently visible
+let autoRefreshInterval;        // Interval ID for auto-refreshing monitoring data
 
+/**
+ * Toggle the visibility of the system logs monitoring panel.
+ * 
+ * Shows/hides the logs section and manages auto-refresh functionality.
+ * When visible, automatically refreshes log data every 3 seconds.
+ */
 function toggleLogs() {
     const logSection = document.getElementById('logSection');
     logsVisible = !logsVisible;
@@ -212,6 +282,12 @@ function toggleLogs() {
     }
 }
 
+/**
+ * Toggle the visibility of the database information monitoring panel.
+ * 
+ * Shows/hides the database section and manages auto-refresh functionality.
+ * When visible, automatically refreshes database info every 3 seconds.
+ */
 function toggleDatabase() {
     const databaseSection = document.getElementById('databaseSection');
     databaseVisible = !databaseVisible;
@@ -228,6 +304,12 @@ function toggleDatabase() {
     }
 }
 
+/**
+ * Load and display system request logs from the backend.
+ * 
+ * Fetches logs from /api/logs endpoint and renders them in a formatted table.
+ * Shows recent HTTP requests with status codes, timing, and client information.
+ */
 async function loadSystemLogs() {
     try {
         const response = await fetch(`${API_URL}/logs`);
@@ -262,6 +344,13 @@ async function loadSystemLogs() {
     }
 }
 
+/**
+ * Load and display database structure and sample data.
+ * 
+ * Fetches database schema information from /api/database/structure endpoint.
+ * Shows table structure with column definitions and recent todo entries.
+ * Useful for development and debugging database state.
+ */
 async function loadDatabaseInfo() {
     try {
         const response = await fetch(`${API_URL}/database/structure`);
@@ -336,6 +425,12 @@ async function loadDatabaseInfo() {
     }
 }
 
+/**
+ * Start automatic refresh of monitoring panels.
+ * 
+ * Sets up a 3-second interval to refresh visible monitoring panels.
+ * Only creates one interval even if multiple panels are open.
+ */
 function startAutoRefresh() {
     if (autoRefreshInterval) return;
     
@@ -345,6 +440,12 @@ function startAutoRefresh() {
     }, 3000); // Refresh every 3 seconds
 }
 
+/**
+ * Stop automatic refresh when no monitoring panels are visible.
+ * 
+ * Clears the refresh interval when both logs and database panels are closed.
+ * Helps conserve resources and reduce unnecessary API calls.
+ */
 function stopAutoRefresh() {
     if (!logsVisible && !databaseVisible && autoRefreshInterval) {
         clearInterval(autoRefreshInterval);
@@ -352,6 +453,12 @@ function stopAutoRefresh() {
     }
 }
 
+/**
+ * Initialize the application when the DOM is fully loaded.
+ * 
+ * Sets up the initial state by loading existing todos from the backend.
+ * This is the main entry point for the frontend application.
+ */
 document.addEventListener('DOMContentLoaded', () => {
     logToConsole('INFO', '🚀 Frontend application initialized');
     loadTodos();
