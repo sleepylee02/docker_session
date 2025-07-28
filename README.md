@@ -27,6 +27,15 @@ docker-todo-app/
 - **Database:** PostgreSQL 15
 - **Container:** Docker + Docker Compose
 
+## Features
+
+- ✅ CRUD operations for todos
+- ✅ Due date support with visual indicators
+- ✅ Real-time two-column log monitoring
+- ✅ Database structure inspection
+- ✅ Health checks and system monitoring
+- ✅ CORS enabled for development
+
 ## API Documentation
 
 **Base URL:** `http://localhost:5000/api`
@@ -41,9 +50,10 @@ docker-todo-app/
 | POST | `/api/todos` | Create todo |
 | PUT | `/api/todos/{id}/toggle` | Toggle completion |
 | DELETE | `/api/todos/{id}` | Delete todo |
-| GET | `/api/logs` | System logs |
+| GET | `/api/logs` | System request logs |
+| GET | `/api/database/structure` | Database info |
 
-### Request/Response Examples
+### API Examples
 
 **Create Todo:**
 ```bash
@@ -52,25 +62,14 @@ curl -X POST http://localhost:5000/api/todos \
   -d '{"title": "Learn Docker", "due_date": "2025-02-01"}'
 ```
 
-**Response:**
-```json
-{
-  "id": 1,
-  "title": "Learn Docker",
-  "completed": false,
-  "created_at": "2025-01-15T10:30:00.123456",
-  "due_date": "2025-02-01T00:00:00"
-}
-```
-
-**Toggle Todo:**
-```bash
-curl -X PUT http://localhost:5000/api/todos/1/toggle
-```
-
 **Get All Todos:**
 ```bash
 curl http://localhost:5000/api/todos
+```
+
+**Toggle Todo Status:**
+```bash
+curl -X PUT http://localhost:5000/api/todos/1/toggle
 ```
 
 ## Database Schema
@@ -85,22 +84,38 @@ CREATE TABLE todos (
 );
 ```
 
-## Development
+## Monitoring Features
 
-### View Logs
+### Real-time Log Viewer
+- **Two-column display:** GET requests vs Other methods (POST/PUT/DELETE)
+- **Performance metrics:** Response times and status codes
+- **Client tracking:** IP addresses and request patterns
+- **Auto-refresh:** Updates every 3 seconds when active
+
+### Database Inspector
+- **Live schema view:** Table structure and column definitions
+- **Sample data:** Recent todo entries with formatting
+- **Statistics:** Row counts and real-time updates
+
+## Development Commands
+
 ```bash
+# Start all services
+docker-compose up --build
+
+# View logs
+docker-compose logs -f
 docker-compose logs -f backend
-```
 
-### Database Access
-```bash
+# Stop services
+docker-compose down
+
+# Clean restart (removes volumes)
+docker-compose down -v && docker-compose up --build
+
+# Database access
 docker-compose exec db psql -U todouser -d tododb
 ```
-
-### Debugging
-- Backend logs: Check Docker logs or `/api/logs` endpoint
-- Database: Use built-in database viewer in frontend
-- Network issues: Verify container communication
 
 ## Environment Variables
 
@@ -111,28 +126,25 @@ docker-compose exec db psql -U todouser -d tododb
 | DB_PASSWORD | todopass | Database password |
 | DB_NAME | tododb | Database name |
 
-## Docker Commands
+## Troubleshooting
 
-```bash
-# Start services
-docker-compose up --build
+### Container Issues
+- **Port conflicts:** Change ports in `docker-compose.yml`
+- **Build failures:** Run `docker-compose down -v` then rebuild
+- **Network issues:** Check `docker network ls`
 
-# Stop services
-docker-compose down
+### Application Issues
+- **API not responding:** Check backend logs with `docker-compose logs backend`
+- **Database connection:** Verify PostgreSQL container is running
+- **Frontend cache:** Hard refresh browser (Ctrl+F5)
 
-# Remove volumes
-docker-compose down -v
+## Learning Objectives
 
-# View service status
-docker-compose ps
-```
-
-## Features
-
-- ✅ CRUD operations for todos
-- ✅ Due date support
-- ✅ Real-time logging
-- ✅ Database monitoring
-- ✅ Health checks
-- ✅ CORS enabled
-- ✅ Auto-generated API docs
+This project demonstrates:
+1. **Multi-container orchestration** with Docker Compose
+2. **Service communication** between frontend, backend, and database
+3. **Volume persistence** for database data
+4. **Environment configuration** with Docker
+5. **Real-time monitoring** and logging
+6. **RESTful API design** with FastAPI
+7. **Database integration** with PostgreSQL

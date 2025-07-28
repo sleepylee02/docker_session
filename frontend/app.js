@@ -315,31 +315,100 @@ async function loadSystemLogs() {
         const response = await fetch(`${API_URL}/logs`);
         const data = await response.json();
         
-        const logContent = document.getElementById('logContent');
+        const getLogContent = document.getElementById('getLogContent');
+        const otherLogContent = document.getElementById('otherLogContent');
         const logStats = document.getElementById('logStats');
         
-        if (data.logs && data.logs.length > 0) {
-            logContent.innerHTML = data.logs
-                .slice(-20)
-                .map(log => {
-                    const statusClass = log.status_code >= 400 ? 'error' : 'success';
-                    return `<div class="log-entry ${statusClass}">
-                        [${log.timestamp.split('T')[1].split('.')[0]}] 
-                        ${log.method} ${log.url.split('localhost:5000')[1] || log.url} 
-                        → ${log.status_code} (${log.process_time_ms}ms)
-                        <br><small>Client: ${log.client_ip}</small>
-                    </div>`;
-                })
-                .join('');
-        } else {
-            logContent.innerHTML = '<div class="log-entry">아직 로그가 없습니다.</div>';
+        if (!getLogContent || !otherLogContent) {
+            console.error('Two-column elements not found!');
+            return;
         }
         
-        logStats.textContent = `총 ${data.total_requests}개 요청 | 최근 ${data.logs.length}개 표시`;
+        if (data.logs && data.logs.length > 0) {
+            // Debug: Check timestamp format
+            if (data.logs.length > 0) {
+                console.log('Sample timestamp:', data.logs[0].timestamp);
+            }
+            
+            // Separate logs by method
+            const getLogs = [];
+            const otherLogs = [];
+            
+            data.logs.forEach(log => {
+                if (log.method === 'GET') {
+                    getLogs.push(log);
+                } else {
+                    otherLogs.push(log);
+                }
+            });
+            
+            // Build GET column content
+            let getHtml = '';
+            if (getLogs.length > 0) {
+                getHtml = getLogs.slice(-10).map(log => {
+                    // Backend generates KST timestamps, extract clean HH:MM:SS format
+                    const timeStr = log.timestamp.split('T')[1].split('.')[0];
+                    const time = timeStr; // Use as-is since it's already in HH:MM:SS format
+                    const statusClass = log.status_code >= 400 ? 'error' : 'success';
+                    return `
+                    <div class="log-entry ${statusClass}">
+                        [${time}] 
+                        <strong>GET</strong> ${log.url.split('localhost:5000')[1] || log.url} 
+                        → ${log.status_code} (${log.process_time_ms}ms)
+                        <br><small>Client: ${log.client_ip}</small>
+                    </div>
+                `;
+                }).join('');
+            } else {
+                getHtml = '<div class="log-entry">GET 요청이 없습니다</div>';
+            }
+            
+            // Build OTHER column content  
+            let otherHtml = '';
+            if (otherLogs.length > 0) {
+                otherHtml = otherLogs.slice(-10).map(log => {
+                    // Backend generates KST timestamps, extract clean HH:MM:SS format
+                    const timeStr = log.timestamp.split('T')[1].split('.')[0];
+                    const time = timeStr; // Use as-is since it's already in HH:MM:SS format
+                    const statusClass = log.status_code >= 400 ? 'error' : 'success';
+                    let methodColor = '#ff9800'; // orange for POST
+                    if (log.method === 'PUT') methodColor = '#2196f3'; // blue for PUT
+                    if (log.method === 'DELETE') methodColor = '#f44336'; // red for DELETE
+                    
+                    return `
+                    <div class="log-entry ${statusClass}">
+                        [${time}] 
+                        <strong style="color: ${methodColor}">${log.method}</strong> ${log.url.split('localhost:5000')[1] || log.url} 
+                        → ${log.status_code} (${log.process_time_ms}ms)
+                        <br><small>Client: ${log.client_ip}</small>
+                    </div>
+                `;
+                }).join('');
+            } else {
+                otherHtml = '<div class="log-entry">POST/PUT/DELETE 요청이 없습니다</div>';
+            }
+            
+            // Update both columns
+            getLogContent.innerHTML = getHtml;
+            otherLogContent.innerHTML = otherHtml;
+            
+            // Update stats
+            logStats.textContent = `총 ${data.total_requests}개 요청 | GET: ${getLogs.length}개 | 기타: ${otherLogs.length}개`;
+            
+        } else {
+            getLogContent.innerHTML = '<div class="log-entry">로그가 없습니다</div>';
+            otherLogContent.innerHTML = '<div class="log-entry">로그가 없습니다</div>';
+            logStats.textContent = '로그 없음';
+        }
         
     } catch (error) {
-        document.getElementById('logContent').innerHTML = 
-            `<div class="log-entry error">로그 로딩 실패: ${error.message}</div>`;
+        const errorMsg = `<div class="log-entry error">로그 로딩 실패: ${error.message}</div>`;
+        if (document.getElementById('getLogContent')) {
+            document.getElementById('getLogContent').innerHTML = errorMsg;
+        }
+        if (document.getElementById('otherLogContent')) {
+            document.getElementById('otherLogContent').innerHTML = errorMsg;
+        }
         logToConsole('ERROR', '❌ Failed to load system logs', error.message);
     }
 }

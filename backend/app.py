@@ -2,9 +2,6 @@
 
 A FastAPI-based REST API for managing todo items with PostgreSQL database.
 This application provides CRUD operations for todos, system logging, and database inspection capabilities.
-
-Author: Docker Session Demo
-Date: 2025
 """
 
 from fastapi import FastAPI, HTTPException, Request

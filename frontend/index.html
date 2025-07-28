@@ -37,9 +37,22 @@
                     <span class="live-indicator">🟢 Live</span>
                 </div>
             </div>
-            <div id="logContent" class="content-box">
-                <div class="log-entry">로그를 불러오는 중...</div>
-            </div>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width: 50%; vertical-align: top; padding-right: 10px;">
+                        <h4 style="background: #e3f2fd; padding: 10px; text-align: center; margin: 0;">📖 GET Requests (읽기)</h4>
+                        <div id="getLogContent" class="content-box">
+                            <div class="log-entry">GET 로그를 불러오는 중...</div>
+                        </div>
+                    </td>
+                    <td style="width: 50%; vertical-align: top; padding-left: 10px;">
+                        <h4 style="background: #fff3e0; padding: 10px; text-align: center; margin: 0;">✏️ Other Methods (쓰기/수정/삭제)</h4>
+                        <div id="otherLogContent" class="content-box">
+                            <div class="log-entry">기타 로그를 불러오는 중...</div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
         
         <!-- Inline Database Viewer -->
