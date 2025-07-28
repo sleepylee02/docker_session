@@ -5,8 +5,6 @@
  * Communicates with the FastAPI backend through REST API calls and includes comprehensive
  * logging and monitoring capabilities.
  * 
- * Author: Docker Session Demo
- * Date: 2025
  */
 
 // Backend API base URL - points to the FastAPI server
