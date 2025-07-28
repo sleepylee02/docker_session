@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도커 Todo 앱</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🐳 도커로 배우는 Todo 앱</h1>
+        <div class="info">
+            <p>이 앱은 3개의 도커 컨테이너로 구성되어 있습니다:</p>
+            <ul>
+                <li>Frontend: Nginx (현재 페이지)</li>
+                <li>Backend: Python FastAPI 서버</li>
+                <li>Database: PostgreSQL</li>
+            </ul>
+        </div>
+        
+        <div class="todo-form">
+            <input type="text" id="todoInput" placeholder="할 일을 입력하세요">
+            <input type="date" id="dueDateInput" placeholder="마감일 선택">
+            <button onclick="addTodo()">추가</button>
+            <button onclick="toggleLogs()" style="margin-left: 10px; background: #ff9800;">📊 로그 보기</button>
+            <button onclick="toggleDatabase()" style="margin-left: 10px; background: #9c27b0;">🗄️ DB 보기</button>
+        </div>
+        
+        <ul id="todoList" class="todo-list"></ul>
+        
+        <!-- Inline Log Viewer -->
+        <div id="logSection" class="system-section" style="display: none;">
+            <div class="section-header">
+                <h3>📊 실시간 시스템 로그</h3>
+                <div class="stats-bar">
+                    <span id="logStats">로딩 중...</span>
+                    <span class="live-indicator">🟢 Live</span>
+                </div>
+            </div>
+            <div id="logContent" class="content-box">
+                <div class="log-entry">로그를 불러오는 중...</div>
+            </div>
+        </div>
+        
+        <!-- Inline Database Viewer -->
+        <div id="databaseSection" class="system-section" style="display: none;">
+            <div class="section-header">
+                <h3>🗄️ 데이터베이스 실시간 상태</h3>
+                <div class="stats-bar">
+                    <span id="dbStats">로딩 중...</span>
+                    <span class="live-indicator">🟢 Live</span>
+                </div>
+            </div>
+            <div class="db-content">
+                <div class="db-flow">
+                    <div class="flow-step">Frontend 입력</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">API 처리</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">PostgreSQL 저장</div>
+                </div>
+                <div id="databaseContent" class="content-box">
+                    <div class="log-entry">데이터베이스 정보를 불러오는 중...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

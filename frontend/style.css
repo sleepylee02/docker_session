@@ -1,0 +1,244 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    color: #2496ed;
+    text-align: center;
+}
+
+.info {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.todo-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#todoInput {
+    flex: 2;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#dueDateInput {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    background: #2496ed;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1976d2;
+}
+
+.todo-list {
+    list-style: none;
+    padding: 0;
+}
+
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    border-left: 4px solid #2196f3;
+}
+
+.todo-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.todo-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.todo-due-date {
+    font-size: 12px;
+    color: #666;
+    background: #e3f2fd;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: inline-block;
+    max-width: fit-content;
+}
+
+.todo-due-date.overdue {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.todo-due-date.today {
+    background: #fff3e0;
+    color: #ef6c00;
+}
+
+.todo-item.completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.delete-btn {
+    background: #f44336;
+    padding: 5px 10px;
+}
+
+.delete-btn:hover {
+    background: #d32f2f;
+}
+
+.system-section {
+    margin-top: 30px;
+    background: white;
+    border: 2px solid #e3f2fd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e3f2fd;
+}
+
+.section-header h3 {
+    margin: 0;
+    color: #2196f3;
+}
+
+.stats-bar {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    font-size: 12px;
+}
+
+.live-indicator {
+    background: #4caf50;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.content-box {
+    max-height: 300px;
+    overflow-y: auto;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+}
+
+.log-entry {
+    padding: 8px;
+    margin-bottom: 5px;
+    background: #fff;
+    border-left: 3px solid #2196f3;
+    border-radius: 3px;
+    word-wrap: break-word;
+}
+
+.log-entry.error {
+    border-left-color: #f44336;
+    background: #ffebee;
+}
+
+.log-entry.success {
+    border-left-color: #4caf50;
+    background: #f1f8e9;
+}
+
+.db-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    color: white;
+}
+
+.flow-step {
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.flow-arrow {
+    margin: 0 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.db-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.db-table th,
+.db-table td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+    font-size: 11px;
+}
+
+.db-table th {
+    background: #2196f3;
+    color: white;
+}
+
+.db-table tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
