@@ -8,7 +8,7 @@
  */
 
 // Backend API base URL - points to the FastAPI server
-const API_URL = 'http://localhost:5000/api';
+const API_URL = '/api';
 
 /**
  * Centralized logging function for frontend operations.

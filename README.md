@@ -28,7 +28,7 @@ docker-todo-app/
 - **Container:** Docker + Docker Compose
 
 ## Features
-
+  
 - ✅ CRUD operations for todos
 - ✅ Due date support with visual indicators
 - ✅ Real-time two-column log monitoring
